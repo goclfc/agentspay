@@ -1,4 +1,5 @@
 FROM node:20-alpine AS deps
+RUN npm install -g npm@10.9.2
 WORKDIR /app
 COPY package.json package-lock.json turbo.json ./
 COPY apps/api/package.json apps/api/
