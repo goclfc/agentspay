@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -36,6 +37,8 @@ app.use('/v1/wallets', walletRouter);
 app.use('/v1/transactions', transactionRouter);
 app.use('/v1/merchants', merchantRouter);
 app.use('/v1/webhooks', webhookRouter);
+
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use(errorHandler);
 
