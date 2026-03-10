@@ -1,18 +1,7 @@
-FROM node:20-alpine AS deps
-WORKDIR /app
-COPY package.json package-lock.json turbo.json ./
-COPY apps/api/package.json apps/api/
-COPY apps/cli/package.json apps/cli/
-COPY apps/mcp/package.json apps/mcp/
-COPY packages/shared/package.json packages/shared/
-COPY packages/sdk/package.json packages/sdk/
-COPY packages/tsconfig/package.json packages/tsconfig/
-RUN npm install --ignore-scripts
-
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm install --ignore-scripts
 RUN npx prisma generate --schema=apps/api/prisma/schema.prisma
 RUN npx turbo build --filter=@usectl/api
 
