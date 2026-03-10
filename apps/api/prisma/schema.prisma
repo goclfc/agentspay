@@ -16,6 +16,7 @@ model User {
   email                  String    @unique
   passwordHash           String
   stripeCustomerId       String?   @unique
+  stripeCardholderId     String?   @unique
   emailVerified          Boolean   @default(false)
   platformBalance        Decimal   @default(0) @db.Decimal(12, 2)
   allowAgentSelfRegister Boolean   @default(false)
@@ -114,6 +115,7 @@ model Wallet {
   agent               Agent        @relation(fields: [agentId], references: [id])
   transactions        Transaction[]
   spendLogs           SpendLog[]
+  issuingCard         IssuingCard?
 
   @@map("wallets")
 }
@@ -124,6 +126,28 @@ enum WalletStatus {
   FROZEN
   EXPIRED
   CLOSED
+}
+
+// ──────────────────────────────────────
+// ISSUING CARD (virtual card per wallet)
+// ──────────────────────────────────────
+model IssuingCard {
+  id                 String   @id @default(cuid())
+  walletId           String   @unique
+  stripeCardId       String   @unique
+  stripeCardholderId String
+  last4              String
+  brand              String   @default("Visa")
+  expMonth           Int
+  expYear            Int
+  status             String   @default("active")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  wallet             Wallet   @relation(fields: [walletId], references: [id])
+
+  @@index([stripeCardId])
+  @@map("issuing_cards")
 }
 
 // ──────────────────────────────────────
@@ -182,7 +206,8 @@ model Transaction {
   merchantId      String?
   merchant        Merchant?         @relation(fields: [merchantId], references: [id])
 
-  stripePaymentId String?
+  stripePaymentId       String?
+  stripeAuthorizationId String?
 
   createdAt       DateTime          @default(now())
   completedAt     DateTime?
@@ -200,6 +225,7 @@ enum TxType {
   FUND
   WITHDRAW
   REFUND
+  CARD_PAYMENT
 }
 
 enum TxStatus {

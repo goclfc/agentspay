@@ -3,7 +3,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { AgentsPay } from '@agentspay/sdk';
+import { AgentsPay } from '@usectl/sdk';
 
 export function registerTools(server: Server, ap: AgentsPay) {
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -95,6 +95,17 @@ export function registerTools(server: Server, ap: AgentsPay) {
           required: ['name', 'requested_amount', 'reason'],
         },
       },
+      {
+        name: 'agentspay_get_card',
+        description: 'Get your virtual card details (card number, CVC, expiry) to make online purchases. Use this when you need to pay for something on a website that accepts Visa/Mastercard.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            wallet_id: { type: 'string', description: 'The wallet ID whose card details you need' },
+          },
+          required: ['wallet_id'],
+        },
+      },
     ],
   }));
 
@@ -156,6 +167,11 @@ export function registerTools(server: Server, ap: AgentsPay) {
             amount: args!.requested_amount as number,
             reason: args?.reason as string | undefined,
           });
+          return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+        }
+
+        case 'agentspay_get_card': {
+          const result = await ap.cards.getDetails(args!.wallet_id as string);
           return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
         }
 

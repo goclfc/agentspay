@@ -37,6 +37,9 @@ export const WEBHOOK_EVENT_TYPES = [
   'agent.created',
   'agent.revoked',
   'merchant.payment_received',
+  'card.authorization.approved',
+  'card.authorization.declined',
+  'card.created',
 ] as const;
 
 // ──────────────────────────────────────
@@ -47,7 +50,7 @@ export type UserTier = 'FREE' | 'PRO';
 export type AgentStatus = 'ACTIVE' | 'SUSPENDED' | 'REVOKED';
 export type WalletStatus = 'PENDING_APPROVAL' | 'ACTIVE' | 'FROZEN' | 'EXPIRED' | 'CLOSED';
 export type MerchantStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED';
-export type TxType = 'PAYMENT' | 'TRANSFER' | 'FUND' | 'WITHDRAW' | 'REFUND';
+export type TxType = 'PAYMENT' | 'TRANSFER' | 'FUND' | 'WITHDRAW' | 'REFUND' | 'CARD_PAYMENT';
 export type TxStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
 export type FundingDirection = 'IN' | 'OUT';
 export type WebhookEventType = typeof WEBHOOK_EVENT_TYPES[number];
@@ -138,7 +141,7 @@ export const transferSchema = z.object({
 
 export const listTransactionsSchema = z.object({
   wallet_id: z.string().optional(),
-  type: z.enum(['PAYMENT', 'TRANSFER', 'FUND', 'WITHDRAW', 'REFUND']).optional(),
+  type: z.enum(['PAYMENT', 'TRANSFER', 'FUND', 'WITHDRAW', 'REFUND', 'CARD_PAYMENT']).optional(),
   from: z.string().datetime().optional(),
   to: z.string().datetime().optional(),
   limit: z.coerce.number().int().min(1).max(100).default(50),
@@ -392,6 +395,25 @@ export interface WebhookEvent {
   type: WebhookEventType;
   created_at: string;
   data: Record<string, unknown>;
+}
+
+// ──────────────────────────────────────
+// CARD RESPONSE TYPES
+// ──────────────────────────────────────
+
+export interface CardInfo {
+  card_id: string;
+  wallet_id: string;
+  last4: string;
+  brand: string;
+  exp_month: number;
+  exp_year: number;
+  status: string;
+}
+
+export interface CardDetails extends CardInfo {
+  number: string;
+  cvc: string;
 }
 
 // ──────────────────────────────────────

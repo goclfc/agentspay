@@ -1,6 +1,7 @@
 import { prisma } from '../lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 import { InsufficientFundsError, NotFoundError, ForbiddenError, BadRequestError } from '../utils/errors';
+import * as stripeService from './stripe.service';
 
 export async function createWallet(
   agentId: string,
@@ -195,6 +196,14 @@ export async function freezeWallet(walletId: string, userId: string) {
   if (wallet.agent.userId !== userId) throw new ForbiddenError();
 
   await prisma.wallet.update({ where: { id: walletId }, data: { status: 'FROZEN' } });
+
+  // Cascade: freeze card if exists
+  const card = await prisma.issuingCard.findUnique({ where: { walletId } });
+  if (card && card.status === 'active') {
+    await stripeService.updateIssuingCardStatus(card.stripeCardId, 'inactive');
+    await prisma.issuingCard.update({ where: { id: card.id }, data: { status: 'inactive' } });
+  }
+
   return { wallet_id: walletId, status: 'frozen' };
 }
 
@@ -204,6 +213,14 @@ export async function unfreezeWallet(walletId: string, userId: string) {
   if (wallet.agent.userId !== userId) throw new ForbiddenError();
 
   await prisma.wallet.update({ where: { id: walletId }, data: { status: 'ACTIVE' } });
+
+  // Cascade: unfreeze card if exists
+  const card = await prisma.issuingCard.findUnique({ where: { walletId } });
+  if (card && card.status === 'inactive') {
+    await stripeService.updateIssuingCardStatus(card.stripeCardId, 'active');
+    await prisma.issuingCard.update({ where: { id: card.id }, data: { status: 'active' } });
+  }
+
   return { wallet_id: walletId, status: 'active' };
 }
 
@@ -213,6 +230,13 @@ export async function closeWallet(walletId: string, userId: string) {
   if (wallet.agent.userId !== userId) throw new ForbiddenError();
 
   const returnedAmount = wallet.balance;
+
+  // Cancel card if exists
+  const card = await prisma.issuingCard.findUnique({ where: { walletId } });
+  if (card) {
+    await stripeService.updateIssuingCardStatus(card.stripeCardId, 'canceled');
+    await prisma.issuingCard.update({ where: { id: card.id }, data: { status: 'canceled' } });
+  }
 
   await prisma.$transaction([
     prisma.wallet.update({ where: { id: walletId }, data: { status: 'CLOSED', balance: 0 } }),
@@ -230,7 +254,7 @@ export async function listWallets(opts: { agentId?: string; userId?: string }) {
   if (opts.agentId) where.agentId = opts.agentId;
   if (opts.userId) where.agent = { userId: opts.userId };
 
-  const wallets = await prisma.wallet.findMany({ where, orderBy: { createdAt: 'desc' } });
+  const wallets = await prisma.wallet.findMany({ where, include: { issuingCard: true }, orderBy: { createdAt: 'desc' } });
   return wallets.map(formatWallet);
 }
 
@@ -278,5 +302,6 @@ function formatWallet(w: any) {
       allowed_merchants: w.allowedMerchants,
     },
     agent_id: w.agentId,
+    has_card: !!w.issuingCard,
   };
 }

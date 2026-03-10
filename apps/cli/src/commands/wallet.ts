@@ -146,3 +146,54 @@ walletCommand
       console.log(`Wallet ${walletId} closed.`);
     } catch (err) { handleError(err); }
   });
+
+walletCommand
+  .command('create-card <walletId>')
+  .description('Create a virtual card for a wallet')
+  .option('--json', 'Output as JSON')
+  .action(async (walletId, opts) => {
+    try {
+      const client = getClient();
+      const result = await client.admin.wallets.createCard(walletId);
+      if (opts.json) {
+        outputResult(result, true);
+      } else {
+        console.log(`Virtual card created for wallet ${walletId}`);
+        outputResult(result, false);
+      }
+    } catch (err) { handleError(err); }
+  });
+
+walletCommand
+  .command('card-info <walletId>')
+  .description('Get card information for a wallet')
+  .option('--json', 'Output as JSON')
+  .action(async (walletId, opts) => {
+    try {
+      const client = getClient();
+      const result = await client.admin.wallets.getCard(walletId);
+      outputResult(result, opts.json);
+    } catch (err) { handleError(err); }
+  });
+
+walletCommand
+  .command('freeze-card <walletId>')
+  .description('Freeze the virtual card for a wallet')
+  .action(async (walletId) => {
+    try {
+      const client = getClient();
+      await client.admin.wallets.freezeCard(walletId);
+      console.log(`Card for wallet ${walletId} frozen.`);
+    } catch (err) { handleError(err); }
+  });
+
+walletCommand
+  .command('unfreeze-card <walletId>')
+  .description('Unfreeze the virtual card for a wallet')
+  .action(async (walletId) => {
+    try {
+      const client = getClient();
+      await client.admin.wallets.unfreezeCard(walletId);
+      console.log(`Card for wallet ${walletId} unfrozen.`);
+    } catch (err) { handleError(err); }
+  });

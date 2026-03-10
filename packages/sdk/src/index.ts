@@ -2,7 +2,7 @@ import { HttpClient, SdkError } from './client';
 
 export { SdkError } from './client';
 
-const DEFAULT_API_URL = 'https://api.agentspay.com';
+const DEFAULT_API_URL = 'https://agentspay.usectl.com';
 
 export interface PayOpts {
   merchantId: string;
@@ -134,6 +134,12 @@ export class AgentsPay {
     },
   };
 
+  cards = {
+    getDetails: async (walletId: string) => {
+      return this.client.get<any>(`/v1/wallets/${walletId}/card/details`);
+    },
+  };
+
   agents = {
     lookup: async (accountNumber: string) => {
       return this.client.get<any>('/v1/agents/lookup', { account: accountNumber });
@@ -218,6 +224,22 @@ export class AgentsPay {
 
       list: async (agentId?: string) => {
         return this.client.get<any>('/v1/wallets', { agent_id: agentId });
+      },
+
+      createCard: async (walletId: string) => {
+        return this.client.post<any>(`/v1/wallets/${walletId}/card`);
+      },
+
+      getCard: async (walletId: string) => {
+        return this.client.get<any>(`/v1/wallets/${walletId}/card`);
+      },
+
+      freezeCard: async (walletId: string) => {
+        return this.client.post<any>(`/v1/wallets/${walletId}/card/freeze`);
+      },
+
+      unfreezeCard: async (walletId: string) => {
+        return this.client.post<any>(`/v1/wallets/${walletId}/card/unfreeze`);
       },
     },
 
