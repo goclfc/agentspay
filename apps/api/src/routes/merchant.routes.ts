@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { registerMerchantSchema, merchantWithdrawSchema } from '@agentspay/shared';
+import { registerMerchantSchema, merchantWithdrawSchema } from '@usectl/shared';
 import * as merchantService from '../services/merchant.service';
 import { authenticate, requireMerchant } from '../middleware/auth.middleware';
 

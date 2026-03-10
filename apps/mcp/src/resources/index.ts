@@ -3,7 +3,7 @@ import {
   ListResourcesRequestSchema,
   ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { AgentsPay } from '@agentspay/sdk';
+import { AgentsPay } from '@usectl/sdk';
 
 export function registerResources(server: Server, ap: AgentsPay) {
   server.setRequestHandler(ListResourcesRequestSchema, async () => ({

@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { depositSchema, withdrawSchema, addPaymentMethodSchema } from '@agentspay/shared';
+import { depositSchema, withdrawSchema, addPaymentMethodSchema } from '@usectl/shared';
 import * as fundingService from '../services/funding.service';
 import { authenticate, requireUser } from '../middleware/auth.middleware';
 

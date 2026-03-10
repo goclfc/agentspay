@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { createAgentSchema, selfRegisterAgentSchema, agentLookupSchema } from '@agentspay/shared';
+import { createAgentSchema, selfRegisterAgentSchema, agentLookupSchema } from '@usectl/shared';
 import * as agentService from '../services/agent.service';
 import { authenticate, requireUser, requireUserOrAgent } from '../middleware/auth.middleware';
 

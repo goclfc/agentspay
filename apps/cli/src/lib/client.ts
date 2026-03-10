@@ -1,4 +1,4 @@
-import { AgentsPay } from '@agentspay/sdk';
+import { AgentsPay } from '@usectl/sdk';
 import { getApiUrl, getMasterKey, loadCredentials } from './config';
 
 export function getClient(): AgentsPay {

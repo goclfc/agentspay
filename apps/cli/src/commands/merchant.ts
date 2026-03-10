@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { AgentsPay } from '@agentspay/sdk';
+import { AgentsPay } from '@usectl/sdk';
 import { getApiUrl } from '../lib/config';
 import { outputResult, handleError } from '../lib/output';
 

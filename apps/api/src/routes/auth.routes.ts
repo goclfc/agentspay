@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { registerSchema, loginSchema, refreshTokenSchema, createApiKeySchema } from '@agentspay/shared';
+import { registerSchema, loginSchema, refreshTokenSchema, createApiKeySchema } from '@usectl/shared';
 import * as authService from '../services/auth.service';
 import { authenticate, requireUser } from '../middleware/auth.middleware';
 

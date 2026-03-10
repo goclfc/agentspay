@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
-import { PLATFORM_FEE_PERCENT } from '@agentspay/shared';
+import { PLATFORM_FEE_PERCENT } from '@usectl/shared';
 import {
   BadRequestError,
   InsufficientFundsError,

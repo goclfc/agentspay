@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { createWebhookSchema } from '@agentspay/shared';
+import { createWebhookSchema } from '@usectl/shared';
 import * as webhookService from '../services/webhook.service';
 import { authenticate, requireUser } from '../middleware/auth.middleware';
 

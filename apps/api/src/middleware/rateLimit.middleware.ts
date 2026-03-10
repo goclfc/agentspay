@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { RATE_LIMITS } from '@agentspay/shared';
+import { RATE_LIMITS } from '@usectl/shared';
 import { hashApiKey } from '../utils/apiKey';
 import { AppError } from '../utils/errors';
 

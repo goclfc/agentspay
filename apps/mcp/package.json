@@ -1,5 +1,5 @@
 {
-  "name": "@agentspay/mcp",
+  "name": "@usectl/mcp",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "@agentspay/sdk": "*"
+    "@usectl/sdk": "*"
   },
   "devDependencies": {
     "tsx": "^4.7.0",

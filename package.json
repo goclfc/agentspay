@@ -1,5 +1,5 @@
 {
-  "name": "agentspay",
+  "name": "agentspay-monorepo",
   "private": true,
   "packageManager": "npm@10.9.2",
   "workspaces": ["apps/*", "packages/*"],

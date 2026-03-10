@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { prisma } from '../lib/prisma';
 import { NotFoundError, ForbiddenError } from '../utils/errors';
-import type { WebhookEventType } from '@agentspay/shared';
+import type { WebhookEventType } from '@usectl/shared';
 
 export async function registerEndpoint(userId: string, url: string, events: string[]) {
   const secret = `whsec_${crypto.randomBytes(24).toString('base64url')}`;

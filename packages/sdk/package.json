@@ -1,15 +1,22 @@
 {
-  "name": "@agentspay/sdk",
-  "version": "0.0.1",
+  "name": "@usectl/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for AgentsPay — payment infrastructure for AI agents",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": ["agentspay", "ai", "agents", "payments", "sdk"],
+  "license": "MIT",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
     "test": "vitest run"
   },
   "dependencies": {
-    "@agentspay/shared": "*"
+    "@usectl/shared": "^0.1.0"
   },
   "devDependencies": {
     "vitest": "^1.3.0"

@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { paySchema, transferSchema, listTransactionsSchema } from '@agentspay/shared';
+import { paySchema, transferSchema, listTransactionsSchema } from '@usectl/shared';
 import * as txService from '../services/transaction.service';
 import { authenticate, requireAgent, requireUserOrAgent } from '../middleware/auth.middleware';
 

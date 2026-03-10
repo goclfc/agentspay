@@ -1,10 +1,13 @@
 {
-  "name": "@agentspay/cli",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@usectl/cli",
+  "version": "0.1.0",
+  "description": "CLI for AgentsPay — payment infrastructure for AI agents",
   "bin": {
     "agentspay": "./dist/index.js"
   },
+  "files": ["dist"],
+  "keywords": ["agentspay", "ai", "agents", "payments", "cli"],
+  "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
@@ -16,8 +19,8 @@
     "inquirer": "^9.2.0",
     "chalk": "^4.1.2",
     "cli-table3": "^0.6.3",
-    "@agentspay/sdk": "*",
-    "@agentspay/shared": "*"
+    "@usectl/sdk": "^0.1.0",
+    "@usectl/shared": "^0.1.0"
   },
   "devDependencies": {
     "tsx": "^4.7.0",

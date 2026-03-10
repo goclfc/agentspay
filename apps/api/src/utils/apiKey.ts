@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { API_KEY_PREFIX, ACCOUNT_NUMBER_PREFIX } from '@agentspay/shared';
+import { API_KEY_PREFIX, ACCOUNT_NUMBER_PREFIX } from '@usectl/shared';
 
 export function generateApiKey(type: 'MASTER' | 'AGENT' | 'MERCHANT'): { key: string; hash: string; prefix: string } {
   const random = crypto.randomBytes(24).toString('base64url');

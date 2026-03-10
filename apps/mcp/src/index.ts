@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { AgentsPay } from '@agentspay/sdk';
+import { AgentsPay } from '@usectl/sdk';
 import { registerTools } from './tools/index.js';
 import { registerResources } from './resources/index.js';
 

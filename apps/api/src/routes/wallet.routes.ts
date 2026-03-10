@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { createWalletSchema, fundWalletSchema } from '@agentspay/shared';
+import { createWalletSchema, fundWalletSchema } from '@usectl/shared';
 import * as walletService from '../services/wallet.service';
 import { authenticate, requireUser, requireUserOrAgent } from '../middleware/auth.middleware';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@agentspay/api",
+  "name": "@usectl/api",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -20,7 +20,7 @@
     "cors": "^2.8.5",
     "morgan": "^1.10.0",
     "uuid": "^9.0.0",
-    "@agentspay/shared": "*"
+    "@usectl/shared": "*"
   },
   "devDependencies": {
     "prisma": "^5.10.0",

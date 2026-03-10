@@ -1,8 +1,14 @@
 {
-  "name": "@agentspay/shared",
-  "version": "0.0.1",
+  "name": "@usectl/shared",
+  "version": "0.1.0",
+  "description": "Shared types, constants, and schemas for AgentsPay",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
