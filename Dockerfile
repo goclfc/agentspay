@@ -1,5 +1,4 @@
 FROM node:20-alpine AS deps
-RUN npm install -g npm@10.9.2
 WORKDIR /app
 COPY package.json package-lock.json turbo.json ./
 COPY apps/api/package.json apps/api/
@@ -8,7 +7,7 @@ COPY apps/mcp/package.json apps/mcp/
 COPY packages/shared/package.json packages/shared/
 COPY packages/sdk/package.json packages/sdk/
 COPY packages/tsconfig/package.json packages/tsconfig/
-RUN npm ci
+RUN npm install --ignore-scripts
 
 FROM node:20-alpine AS builder
 WORKDIR /app
