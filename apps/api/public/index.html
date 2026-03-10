@@ -5,164 +5,451 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgentsPay — Payment Infrastructure for AI Agents</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,monospace;background:#0a0a0a;color:#e0e0e0;line-height:1.6}
-  a{color:#60a5fa;text-decoration:none}
-  a:hover{text-decoration:underline}
-  .container{max-width:800px;margin:0 auto;padding:40px 24px}
-  h1{font-size:2rem;color:#fff;margin-bottom:8px}
-  .tagline{color:#9ca3af;font-size:1.1rem;margin-bottom:40px}
-  h2{font-size:1.3rem;color:#fff;margin:32px 0 12px;padding-top:24px;border-top:1px solid #1f2937}
-  h3{font-size:1rem;color:#d1d5db;margin:20px 0 8px}
-  pre{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto;margin:8px 0 16px;font-size:0.9rem;line-height:1.5}
-  code{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:0.9rem}
-  .inline-code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:0.85rem}
-  .badge{display:inline-block;background:#1e3a5f;color:#60a5fa;padding:2px 10px;border-radius:12px;font-size:0.8rem;margin-right:8px}
-  .endpoint{display:flex;gap:8px;align-items:center;padding:6px 0;font-size:0.9rem}
-  .method{font-weight:700;min-width:60px}
-  .get{color:#34d399}.post{color:#fbbf24}.del{color:#f87171}
-  .section{margin-bottom:16px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
-  @media(max-width:600px){.grid{grid-template-columns:1fr}}
-  .card{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:16px}
-  .card h3{margin-top:0}
-  .base-url{color:#9ca3af;font-size:0.85rem;margin-bottom:16px}
-  .footer{margin-top:48px;padding-top:24px;border-top:1px solid #1f2937;color:#6b7280;font-size:0.85rem}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #fff; color: #1f2328; line-height: 1.7; font-size: 16px;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 32px 32px 64px; }
+
+  /* Markdown-style headings */
+  h1 { font-size: 2em; font-weight: 600; margin: 0 0 8px; padding-bottom: 12px; border-bottom: 1px solid #d1d9e0; }
+  h2 { font-size: 1.5em; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #d1d9e0; }
+  h3 { font-size: 1.25em; font-weight: 600; margin: 24px 0 12px; }
+  h4 { font-size: 1em; font-weight: 600; margin: 20px 0 8px; }
+  p { margin: 0 0 16px; }
+  ul, ol { margin: 0 0 16px; padding-left: 2em; }
+  li { margin-bottom: 4px; }
+
+  /* Links */
+  a { color: #0969da; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Inline code */
+  code {
+    font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 85%; background: #eff1f3; padding: 0.2em 0.4em; border-radius: 6px;
+  }
+
+  /* Code blocks */
+  pre {
+    background: #f6f8fa; border: 1px solid #d1d9e0; border-radius: 6px;
+    padding: 16px; overflow-x: auto; margin: 0 0 16px; line-height: 1.45;
+  }
+  pre code { background: none; padding: 0; font-size: 85%; }
+
+  /* Table */
+  table { border-collapse: collapse; width: 100%; margin: 0 0 16px; }
+  th, td { border: 1px solid #d1d9e0; padding: 8px 13px; text-align: left; }
+  th { background: #f6f8fa; font-weight: 600; }
+  tr:nth-child(even) { background: #f6f8fa; }
+
+  /* Blockquote */
+  blockquote {
+    border-left: 4px solid #d1d9e0; padding: 0 16px; color: #656d76; margin: 0 0 16px;
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px;
+    border-radius: 12px; margin-right: 4px; vertical-align: middle;
+  }
+  .badge-blue { background: #ddf4ff; color: #0969da; }
+  .badge-green { background: #dafbe1; color: #1a7f37; }
+  .badge-purple { background: #fbefff; color: #8250df; }
+  .badge-orange { background: #fff1e5; color: #bc4c00; }
+
+  /* Horizontal rule */
+  hr { border: none; border-top: 1px solid #d1d9e0; margin: 24px 0; }
+
+  /* Method colors */
+  .m-get { color: #1a7f37; font-weight: 600; }
+  .m-post { color: #bc4c00; font-weight: 600; }
+  .m-del { color: #cf222e; font-weight: 600; }
+
+  .flow-diagram {
+    background: #f6f8fa; border: 1px solid #d1d9e0; border-radius: 6px;
+    padding: 20px; margin: 16px 0; font-family: 'SF Mono', monospace; font-size: 14px;
+    line-height: 1.6; overflow-x: auto; white-space: pre;
+  }
+  .dim { color: #656d76; }
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #d1d9e0; color: #656d76; font-size: 14px; }
 </style>
 </head>
 <body>
 <div class="container">
 
 <h1>AgentsPay</h1>
-<p class="tagline">Payment infrastructure for AI agents. Give your agents wallets with spending limits, approvals, and real-time transaction tracking.</p>
+<p><strong>Payment infrastructure for AI agents.</strong> Give your agents wallets with spending limits, virtual cards, and real-time transaction tracking. No UI &mdash; pure API, SDK, CLI, and MCP.</p>
 
-<div class="grid">
-  <div class="card">
-    <h3>For Developers</h3>
-    <p>CLI + SDK to create agents, fund wallets, and track spend from your code or terminal.</p>
-  </div>
-  <div class="card">
-    <h3>For AI Agents</h3>
-    <p>MCP server + SDK for agents to request wallets, make payments, and check balances autonomously.</p>
-  </div>
-</div>
+<blockquote>
+  <p>Your agent gets a virtual Visa card linked to its wallet. It can pay anywhere &mdash; DoorDash, Amazon, any website. You set the limits once, and the server auto-approves or declines in real-time.</p>
+</blockquote>
 
-<h2>Quick Start — CLI</h2>
+<h2>How It Works</h2>
+<div class="flow-diagram"><span class="dim">1.</span> You deposit money (Stripe Checkout)
+        &darr;
+<span class="dim">2.</span> Funds land in your <strong>platform balance</strong>
+        &darr;
+<span class="dim">3.</span> You fund an <strong>agent wallet</strong> (with spending limits)
+        &darr;
+<span class="dim">4.</span> Wallet gets a <strong>virtual Visa card</strong>
+        &darr;
+<span class="dim">5.</span> Agent uses the card to pay online
+        &darr;
+<span class="dim">6.</span> Stripe asks our server: "approve this charge?"
+        &darr;
+<span class="dim">7.</span> We check balance + limits &rarr; <strong>Approve &check;</strong> or <strong>Decline &cross;</strong>
+        &darr;
+<span class="dim">8.</span> Wallet balance decremented atomically</div>
+
+<h2>Key Concepts</h2>
+
+<h3>Agents</h3>
+<p>An agent is an AI system that can hold wallets and make payments. Each agent gets a unique account number (<code>AGT-XXXXXXXX</code>) and an API key for authentication.</p>
+
+<h3>Wallets</h3>
+<p>Wallets are budgets with guardrails. Each wallet belongs to one agent and has:</p>
+<ul>
+  <li><strong>Balance</strong> &mdash; available funds in USD</li>
+  <li><strong>Daily limit</strong> &mdash; max spend per day</li>
+  <li><strong>Monthly limit</strong> &mdash; max spend per month</li>
+  <li><strong>Per-transaction limit</strong> &mdash; max single payment</li>
+  <li><strong>Allowed merchants</strong> &mdash; optional whitelist</li>
+  <li><strong>Expiry date</strong> &mdash; optional time-limited access</li>
+</ul>
+
+<h3>Virtual Cards</h3>
+<p>Each wallet can have one virtual Visa card. The card is issued via Stripe Issuing and can be used for online purchases anywhere Visa is accepted. The agent retrieves the card number, CVC, and expiry to fill in checkout forms.</p>
+<ul>
+  <li>Cards inherit wallet spending limits</li>
+  <li>Freezing a wallet auto-freezes its card</li>
+  <li>Closing a wallet cancels its card</li>
+  <li>Authorization decisions happen in &lt;2 seconds</li>
+</ul>
+
+<h3>Transactions</h3>
+<p>Every payment, transfer, and card charge is recorded as a transaction with full metadata, timestamps, and idempotency keys.</p>
+<p>Types: <code>PAYMENT</code> (merchant), <code>TRANSFER</code> (agent-to-agent), <code>FUND</code>, <code>WITHDRAW</code>, <code>REFUND</code>, <code>CARD_PAYMENT</code> (virtual card)</p>
+
+<h2>Quick Start</h2>
+
+<h3>1. Register &amp; Login</h3>
 <pre><code>npm install -g @usectl/cli
 
-agentspay auth register --email you@example.com --password yourpassword
-agentspay auth login    --email you@example.com --password yourpassword
+agentspay auth register --email you@example.com --password s3cret
+agentspay auth login    --email you@example.com --password s3cret</code></pre>
 
-# Create an agent and give it a wallet
-agentspay agent create --name "my-agent"
-agentspay wallet create --agent-id &lt;AGENT_ID&gt; --name "main-wallet"
+<h3>2. Deposit Funds</h3>
+<pre><code># Opens Stripe Checkout in your browser
+agentspay funding deposit --amount 100</code></pre>
 
-# Fund the wallet and check balance
-agentspay wallet fund   --id &lt;WALLET_ID&gt; --amount 50.00
-agentspay wallet get    --id &lt;WALLET_ID&gt;
+<h3>3. Create an Agent</h3>
+<pre><code>agentspay agent create --name "shopping-agent" --description "Buys supplies"
+# Returns: agent_id, account_number (AGT-...), api_key</code></pre>
 
-# View transactions
-agentspay tx list</code></pre>
+<h3>4. Create &amp; Fund a Wallet</h3>
+<pre><code>agentspay wallet create \
+  --agent-id &lt;AGENT_ID&gt; \
+  --name "shopping-budget" \
+  --funding 50 \
+  --daily-limit 20 \
+  --limit-per-tx 10
 
-<h2>Quick Start — SDK</h2>
-<pre><code>npm install @usectl/sdk</code></pre>
+agentspay wallet fund &lt;WALLET_ID&gt; --amount 25</code></pre>
+
+<h3>5. Issue a Virtual Card</h3>
+<pre><code>agentspay wallet create-card &lt;WALLET_ID&gt;
+agentspay wallet card-info   &lt;WALLET_ID&gt;</code></pre>
+
+<h3>6. Agent Pays Online</h3>
+<p>The agent uses its API key to retrieve card details, then fills in checkout forms:</p>
 <pre><code>import { AgentsPay } from '@usectl/sdk';
 
-const ap = new AgentsPay({ apiKey: 'your-api-key' });
+const ap = new AgentsPay({ agentKey: 'agk_...' });
 
-// Create an agent
-const agent = await ap.agents.create({ name: 'my-agent' });
+// Get virtual card details
+const card = await ap.cards.getDetails('wallet_id');
+// card.number, card.cvc, card.exp_month, card.exp_year
 
-// Create and fund a wallet
-const wallet = await ap.wallets.create({
-  agent_id: agent.id,
-  name: 'main-wallet',
-  funding_amount: 100.00,
-  limit_per_tx: 25.00,
-});
+// Agent uses these to pay on any website</code></pre>
+
+<h2>SDK</h2>
+<pre><code>npm install @usectl/sdk</code></pre>
+
+<h3>Agent Operations (agentKey auth)</h3>
+<pre><code>import { AgentsPay } from '@usectl/sdk';
+const ap = new AgentsPay({ agentKey: 'agk_...' });
 
 // Check balance
-const balance = await ap.wallets.getBalance(wallet.id);</code></pre>
+await ap.wallets.getBalance();
+await ap.wallets.getBalance('specific-wallet-id');
 
-<h2>MCP Server (for Claude &amp; AI agents)</h2>
-<pre><code>npm install -g @usectl/cli</code></pre>
-<p>Add to your MCP config (<span class="inline-code">claude_desktop_config.json</span> or similar):</p>
+// List wallets
+await ap.wallets.list();
+
+// Pay a registered merchant
+await ap.pay({
+  merchantId: 'merchant-id',
+  amount: 9.99,
+  description: 'API tokens',
+});
+
+// Transfer to another agent
+await ap.transfer({
+  toAgent: 'AGT-12345678',
+  amount: 5.00,
+  reason: 'Payment for subtask',
+});
+
+// Get virtual card details
+await ap.cards.getDetails('wallet-id');
+
+// View transactions
+await ap.transactions.list({ limit: 10, type: 'PAYMENT' });
+
+// Look up another agent
+await ap.agents.lookup('AGT-12345678');
+
+// Browse merchants
+await ap.merchants.list({ search: 'openai' });
+
+// Request a new wallet from owner
+await ap.wallets.request({
+  name: 'research-budget',
+  amount: 100,
+  reason: 'Need tokens for research',
+});</code></pre>
+
+<h3>Admin Operations (masterKey auth)</h3>
+<pre><code>const ap = new AgentsPay({ masterKey: 'mk_...' });
+
+// Agent management
+await ap.admin.agents.create({ name: 'my-agent' });
+await ap.admin.agents.list();
+await ap.admin.agents.get('agent-id');
+await ap.admin.agents.revoke('agent-id');
+await ap.admin.agents.rotateKey('agent-id');
+
+// Wallet management
+await ap.admin.wallets.create({ agentId: '...', name: 'budget', fundingAmount: 100 });
+await ap.admin.wallets.list();
+await ap.admin.wallets.fund('wallet-id', 50);
+await ap.admin.wallets.freeze('wallet-id');
+await ap.admin.wallets.unfreeze('wallet-id');
+await ap.admin.wallets.approve('wallet-id');
+await ap.admin.wallets.reject('wallet-id');
+await ap.admin.wallets.close('wallet-id');
+
+// Card management
+await ap.admin.wallets.createCard('wallet-id');
+await ap.admin.wallets.getCard('wallet-id');
+await ap.admin.wallets.freezeCard('wallet-id');
+await ap.admin.wallets.unfreezeCard('wallet-id');
+
+// Funding
+await ap.admin.funding.getBalance();
+await ap.admin.funding.deposit(100);
+
+// Transactions
+await ap.admin.transactions.list({ limit: 50 });
+
+// Webhooks
+await ap.admin.webhooks.create('https://example.com/hook', ['payment.completed']);
+await ap.admin.webhooks.list();
+await ap.admin.webhooks.delete('webhook-id');</code></pre>
+
+<h2>MCP Server (for Claude, GPT, etc.)</h2>
+<p>Let your AI agent manage money autonomously via <a href="https://modelcontextprotocol.io">Model Context Protocol</a>.</p>
+
+<pre><code>npm install -g @usectl/mcp</code></pre>
+
+<p>Add to your MCP config (<code>claude_desktop_config.json</code>):</p>
 <pre><code>{
   "mcpServers": {
     "agentspay": {
       "command": "npx",
       "args": ["-y", "@usectl/mcp"],
       "env": {
-        "AGENTSPAY_API_KEY": "your-api-key"
+        "AGENTSPAY_API_KEY": "agk_your_agent_key"
       }
     }
   }
 }</code></pre>
-<p>Available tools: <span class="inline-code">create_wallet</span>, <span class="inline-code">get_balance</span>, <span class="inline-code">submit_payment</span>, <span class="inline-code">list_transactions</span>, <span class="inline-code">register_merchant</span>, <span class="inline-code">check_merchant</span>, <span class="inline-code">get_spending_summary</span></p>
 
-<h2>REST API</h2>
-<p class="base-url">Base URL: <span class="inline-code">https://agentspay.usectl.com/v1</span></p>
+<h4>Available MCP Tools</h4>
+<table>
+  <thead><tr><th>Tool</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>agentspay_get_balance</code></td><td>Check wallet balance</td></tr>
+    <tr><td><code>agentspay_pay</code></td><td>Pay a registered merchant</td></tr>
+    <tr><td><code>agentspay_transfer</code></td><td>Transfer funds to another agent</td></tr>
+    <tr><td><code>agentspay_list_transactions</code></td><td>View payment history</td></tr>
+    <tr><td><code>agentspay_lookup_agent</code></td><td>Look up an agent by account number</td></tr>
+    <tr><td><code>agentspay_list_merchants</code></td><td>Browse available merchants</td></tr>
+    <tr><td><code>agentspay_request_wallet</code></td><td>Request a new wallet from your owner</td></tr>
+    <tr><td><code>agentspay_get_card</code></td><td>Get virtual card details (number, CVC, expiry)</td></tr>
+  </tbody>
+</table>
+
+<h2>REST API Reference</h2>
+<p>Base URL: <code>https://agentspay.usectl.com/v1</code></p>
+
+<h3>Authentication</h3>
+<p>All requests require an <code>Authorization</code> header:</p>
+<ul>
+  <li><strong>User/Admin:</strong> <code>Bearer &lt;masterKey&gt;</code></li>
+  <li><strong>Agent:</strong> <code>Bearer &lt;agentKey&gt;</code></li>
+</ul>
 
 <h3>Auth</h3>
-<div class="section">
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/auth/register</code></div>
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/auth/login</code></div>
-</div>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/auth/register</code></td><td>Create account (email, password)</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/auth/login</code></td><td>Get master key (email, password)</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/auth/me</code></td><td>Get current user info</td></tr>
+  </tbody>
+</table>
 
 <h3>Agents</h3>
-<div class="section">
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/agents</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/agents</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/agents/:id</code></div>
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/agents/:id/api-key</code></div>
-</div>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/agents</code></td><td>Create a new agent</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/agents</code></td><td>List all agents</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/agents/:id</code></td><td>Get agent details</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/agents/:id/rotate-key</code></td><td>Rotate agent API key</td></tr>
+    <tr><td><span class="m-del">DELETE</span></td><td><code>/v1/agents/:id</code></td><td>Revoke agent</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/agents/lookup</code></td><td>Look up agent by account number</td></tr>
+  </tbody>
+</table>
 
 <h3>Wallets</h3>
-<div class="section">
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/wallets</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/wallets</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/wallets/:id</code></div>
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/wallets/:id/fund</code></div>
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/wallets/:id/freeze</code></div>
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/wallets/:id/approve</code></div>
-  <div class="endpoint"><span class="method del">DELETE</span> <code>/v1/wallets/:id</code></div>
-</div>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets</code></td><td>Create wallet (admin) or request wallet (agent)</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/wallets</code></td><td>List wallets</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/wallets/:id</code></td><td>Get wallet details &amp; balance</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/fund</code></td><td>Add funds to wallet</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/freeze</code></td><td>Freeze wallet (and its card)</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/unfreeze</code></td><td>Unfreeze wallet (and its card)</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/approve</code></td><td>Approve pending wallet request</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/reject</code></td><td>Reject pending wallet request</td></tr>
+    <tr><td><span class="m-del">DELETE</span></td><td><code>/v1/wallets/:id</code></td><td>Close wallet (cancels card)</td></tr>
+  </tbody>
+</table>
+
+<h3>Virtual Cards</h3>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/card</code></td><td>User</td><td>Create virtual card for wallet</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/wallets/:id/card</code></td><td>User</td><td>Get masked card info (last4, brand)</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/wallets/:id/card/details</code></td><td>Agent</td><td>Get full card number, CVC, expiry</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/card/freeze</code></td><td>User</td><td>Freeze virtual card</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/wallets/:id/card/unfreeze</code></td><td>User</td><td>Unfreeze virtual card</td></tr>
+  </tbody>
+</table>
 
 <h3>Transactions</h3>
-<div class="section">
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/transactions</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/transactions</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/transactions/:id</code></div>
-</div>
-
-<h3>Merchants</h3>
-<div class="section">
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/merchants</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/merchants</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/merchants/:id/verify</code></div>
-</div>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/transactions/pay</code></td><td>Pay a merchant</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/transactions/transfer</code></td><td>Transfer to another agent</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/transactions</code></td><td>List transactions (filterable)</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/transactions/:id</code></td><td>Get transaction details</td></tr>
+  </tbody>
+</table>
 
 <h3>Funding</h3>
-<div class="section">
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/funding/payment-methods</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/funding/payment-methods</code></div>
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/funding/deposit</code></div>
-</div>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/funding/balance</code></td><td>Get platform balance</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/funding/deposit</code></td><td>Create Stripe Checkout session</td></tr>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/funding/withdraw</code></td><td>Withdraw funds</td></tr>
+  </tbody>
+</table>
+
+<h3>Merchants</h3>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/merchants</code></td><td>List merchants (search, category filter)</td></tr>
+  </tbody>
+</table>
 
 <h3>Webhooks</h3>
-<div class="section">
-  <div class="endpoint"><span class="method post">POST</span> <code>/v1/webhooks</code></div>
-  <div class="endpoint"><span class="method get">GET</span> <code>/v1/webhooks</code></div>
-  <div class="endpoint"><span class="method del">DELETE</span> <code>/v1/webhooks/:id</code></div>
-</div>
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m-post">POST</span></td><td><code>/v1/webhooks</code></td><td>Register webhook endpoint</td></tr>
+    <tr><td><span class="m-get">GET</span></td><td><code>/v1/webhooks</code></td><td>List webhooks</td></tr>
+    <tr><td><span class="m-del">DELETE</span></td><td><code>/v1/webhooks/:id</code></td><td>Delete webhook</td></tr>
+  </tbody>
+</table>
+
+<h4>Webhook Events</h4>
+<p><code>payment.completed</code>, <code>payment.failed</code>, <code>transfer.completed</code>, <code>wallet.funded</code>, <code>wallet.frozen</code>, <code>wallet.closed</code>, <code>wallet.limit_exceeded</code>, <code>card.authorization.approved</code>, <code>card.authorization.declined</code>, <code>card.created</code></p>
+
+<h2>CLI Reference</h2>
+<pre><code>npm install -g @usectl/cli</code></pre>
+
+<table>
+  <thead><tr><th>Command</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>agentspay auth register</code></td><td>Create account</td></tr>
+    <tr><td><code>agentspay auth login</code></td><td>Login and save credentials</td></tr>
+    <tr><td><code>agentspay agent create</code></td><td>Create an agent</td></tr>
+    <tr><td><code>agentspay agent list</code></td><td>List agents</td></tr>
+    <tr><td><code>agentspay wallet create</code></td><td>Create a wallet with limits</td></tr>
+    <tr><td><code>agentspay wallet list</code></td><td>List wallets</td></tr>
+    <tr><td><code>agentspay wallet fund &lt;id&gt;</code></td><td>Fund a wallet</td></tr>
+    <tr><td><code>agentspay wallet freeze &lt;id&gt;</code></td><td>Freeze wallet + card</td></tr>
+    <tr><td><code>agentspay wallet create-card &lt;id&gt;</code></td><td>Issue virtual card</td></tr>
+    <tr><td><code>agentspay wallet card-info &lt;id&gt;</code></td><td>View card info</td></tr>
+    <tr><td><code>agentspay wallet freeze-card &lt;id&gt;</code></td><td>Freeze card only</td></tr>
+    <tr><td><code>agentspay wallet unfreeze-card &lt;id&gt;</code></td><td>Unfreeze card</td></tr>
+    <tr><td><code>agentspay funding deposit</code></td><td>Deposit via Stripe</td></tr>
+    <tr><td><code>agentspay funding balance</code></td><td>Check platform balance</td></tr>
+    <tr><td><code>agentspay tx list</code></td><td>List transactions</td></tr>
+    <tr><td><code>agentspay merchant list</code></td><td>Browse merchants</td></tr>
+    <tr><td><code>agentspay webhook create</code></td><td>Register webhook</td></tr>
+  </tbody>
+</table>
+
+<h2>Security Model</h2>
+<ul>
+  <li><strong>Master Key</strong> (<code>mk_...</code>) &mdash; full admin access. Create agents, manage wallets, view all transactions.</li>
+  <li><strong>Agent Key</strong> (<code>agk_...</code>) &mdash; scoped to one agent. Can only access its own wallets and make payments within limits.</li>
+  <li>Agents cannot exceed spending limits, even with valid keys</li>
+  <li>All transactions are idempotent (safe to retry)</li>
+  <li>Card authorizations use row-level locking to prevent double-spend</li>
+  <li>Wallet balance is deducted atomically on card authorization</li>
+</ul>
+
+<h2>Architecture</h2>
+<ul>
+  <li><strong>API:</strong> Express + Prisma + PostgreSQL</li>
+  <li><strong>Payments:</strong> Stripe (Checkout for deposits, Issuing for virtual cards)</li>
+  <li><strong>Auth:</strong> JWT tokens, bcrypt password hashing</li>
+  <li><strong>Rate limiting:</strong> Per-IP and per-key</li>
+  <li><strong>Webhooks:</strong> HMAC-signed delivery with retry</li>
+</ul>
+
+<hr>
 
 <div class="footer">
   <p>
+    <strong>Packages:</strong>
     <a href="https://www.npmjs.com/package/@usectl/cli">@usectl/cli</a> &middot;
     <a href="https://www.npmjs.com/package/@usectl/sdk">@usectl/sdk</a> &middot;
     <a href="https://www.npmjs.com/package/@usectl/mcp">@usectl/mcp</a>
   </p>
-  <p style="margin-top:8px">Built by <a href="https://usectl.com">usectl</a></p>
+  <p style="margin-top: 8px;">Built by <a href="https://usectl.com">usectl</a></p>
 </div>
 
 </div>
