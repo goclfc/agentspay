@@ -3,7 +3,8 @@ WORKDIR /app
 COPY . .
 RUN npm install --ignore-scripts
 RUN npx prisma generate --schema=apps/api/prisma/schema.prisma
-RUN npx turbo build --filter=@usectl/api
+RUN cd packages/shared && npx tsc
+RUN cd apps/api && npx tsc && npx tsc-alias
 
 FROM node:20-alpine AS runner
 RUN apk add --no-cache openssl
