@@ -27,4 +27,4 @@ COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 COPY --from=builder /app/package.json ./package.json
 EXPOSE 80
-CMD ["sh", "-c", "echo 'Starting AgentsPay...' && echo \"DATABASE_URL=${DATABASE_URL:-NOT SET}\" && cd apps/api && echo 'Running prisma db push...' && npx prisma db push --skip-generate 2>&1 && echo 'Prisma done. Starting server...' && node dist/index.js"]
+CMD ["node", "apps/api/dist/index.js"]
