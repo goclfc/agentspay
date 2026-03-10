@@ -1,0 +1,19 @@
+{
+  "name": "agentspay",
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "db:generate": "cd apps/api && npx prisma generate",
+    "db:migrate": "cd apps/api && npx prisma migrate deploy",
+    "db:push": "cd apps/api && npx prisma db push"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  }
+}
