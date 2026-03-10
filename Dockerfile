@@ -21,6 +21,5 @@ COPY --from=builder /app/apps/api/public ./apps/api/public
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/apps/api/.env.production ./apps/api/.env.production
 EXPOSE 80
-CMD ["sh", "-c", "cd apps/api && export $(cat .env.production | xargs) && for i in 1 2 3 4 5; do npx prisma db push --skip-generate && break || sleep 5; done && node dist/index.js"]
+CMD ["sh", "-c", "cd apps/api && for i in 1 2 3 4 5; do npx prisma db push --skip-generate && break || sleep 5; done && node dist/index.js"]
