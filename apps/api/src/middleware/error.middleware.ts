@@ -21,6 +21,9 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
 
   console.error('Unhandled error:', err);
   res.status(500).json({
-    error: { code: 'INTERNAL_ERROR', message: 'Internal server error' },
+    error: {
+      code: 'INTERNAL_ERROR',
+      message: err.message,
+    },
   });
 }
