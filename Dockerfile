@@ -27,4 +27,4 @@ COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 COPY --from=builder /app/package.json ./package.json
 EXPOSE 80
-CMD ["sh", "-c", "cd apps/api && npx prisma migrate deploy && node dist/index.js"]
+CMD ["sh", "-c", "cd apps/api && npx prisma db push --skip-generate && node dist/index.js"]
