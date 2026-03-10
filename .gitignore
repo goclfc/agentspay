@@ -10,3 +10,4 @@ coverage/
 prisma/migrations/
 *.log
 .DS_Store
+.env.production
